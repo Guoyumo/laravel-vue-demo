@@ -1,0 +1,17 @@
+
+// Fonts
+// @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.padding-top-5{
+    padding-top: 5%;
+}
+.border-radius-5{
+    width: 100%;
+    border-radius: 5px;
+}
