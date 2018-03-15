@@ -1,5 +1,6 @@
 <template>
 <div class="container">
+  <div>test {{count}}</div>
   <div class="row padding-top-5">
     <div class="col-md-3">
       <div class="panel panel-default">
@@ -47,6 +48,7 @@
 
 <script>
   import FilterLayout from './FilterLayout.vue'
+  import { mapState } from 'vuex'
   export default {
     name: 'Demo',
     data: function () {
@@ -187,7 +189,14 @@
         //   });
         // }
         return result;
-      }
+      },
+      count (){
+        return this.$store.state.count
+      },
+      // ... 为js中展开运算符
+      ...mapState([
+        'category'
+      ])
     },
     components:{
       FilterLayout
@@ -225,6 +234,7 @@
         });
         */ 
         console.log('success');
+        console.log(this.category);
     }
   }
 </script>
