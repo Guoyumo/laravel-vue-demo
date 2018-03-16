@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-  <div>test {{count}}</div>
+  <div>{{count}}</div>
   <div class="row padding-top-5">
     <div class="col-md-3">
       <div class="panel panel-default">
@@ -12,6 +12,9 @@
             <component v-bind:is="componentName()" :filter="filter" :demoFilter="demoFilter" :filterValue="filterValue" @filterResult="filterResult"></component>
           </div>
         </div>
+
+        {{demoFilter}}
+        {{filtedResults}}
       </div>
     </div>
     <div class="col-md-9">
@@ -157,31 +160,46 @@
     },
     computed:{
       filtedResults:function(){
-        var result = [];
-        var size = Object.keys(this.filterValue).length;
-        var filterValue = this.filterValue;
-        this.products.forEach((product,index) => {
-          var isAssign = [];
-          for(var i = 0;i<size;i++){
-            let pushResult = false;
-            if(filterValue[i] == "" && isAssign){
-              pushResult = true;
-            }else{
-              let filters = this.filterValue[i].split(',');
-              product[i].forEach(element =>{
-                if(filters.includes(element)){
-                  pushResult =true;
-                 }
-              });
-            }
-            isAssign.push(pushResult);
-          }
-          if(! isAssign.includes(false)){
-            result.push(product);
-          }
-        });
+        // var result = [];
+        // var size = Object.keys(this.filterValue).length;
+        // var filterValue = this.filterValue;
+        // this.products.forEach((product,index) => {
+        //   var isAssign = [];
+        //   for(var i = 0;i<size;i++){
+        //     let pushResult = false;
+        //     if(filterValue[i] == "" && isAssign){
+        //       pushResult = true;
+        //     }else{
+        //       let filters = this.filterValue[i].split(',');
+        //       product[i].forEach(element =>{
+        //         if(filters.includes(element)){
+        //           pushResult =true;
+        //          }
+        //       });
+        //     }
+        //     isAssign.push(pushResult);
+        //   }
+        //   if(! isAssign.includes(false)){
+        //     result.push(product);
+        //   }
+        // });
         
-        // let result = this.products;
+        let result1 = this.products;
+
+        // products is an array like object use this solution
+        Array.prototype.forEach.call(result1, child => {
+          console.log(child)
+        });
+        let demoFilter = this.demoFilter;
+        let categoryLength = this.demoFilter.category.length;
+        let brandLength = this.demoFilter.brand.length;
+        // result.froEach((product)=>{
+        //   if(this.hasOne(product.category,demoFilter.category) && this.hasOne(product.brand,demoFilter.brand)){
+        //     product.show = true;
+        //   }else{
+        //     product.show = false;
+        //   }
+        // });
         // for (let j = 0, jl = this.filters.length; j < jl; j++) {
         //   result = result.filter(x => {
         //     //this.demoFilter[this.filters[j].key] = ['mobile', 'pant']
