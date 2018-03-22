@@ -12,9 +12,6 @@
             <component v-bind:is="componentName()" :filter="filter" :demoFilter="demoFilter" :filterValue="filterValue" @filterResult="filterResult"></component>
           </div>
         </div>
-
-        {{demoFilter}}
-        {{filtedResults}}
       </div>
     </div>
     <div class="col-md-9">
@@ -24,7 +21,7 @@
         </div>
         <div class="panel-body">
           <div class="row">
-            <article class="col-md-4" style="padding:10px;" v-for="(filterResultValue,index) in filtedResults" :key="index" v-if="pagination(index)">
+            <article class="col-md-4" style="padding:10px;" v-for="(filterResultValue,index) in filtedResults" :key="index" v-if="pagination(index) && filterResultValue.show">
                 <div class="">
                   <figure class="image-box"><img src="http://tools.sixtine.system-in-motion.com/website/application/files/cache/00b255d89afd1f1510d0ce6e0e6b0625.jpeg" alt="" class="border-radius-5">
                 </figure>
@@ -51,7 +48,7 @@
 
 <script>
   import FilterLayout from './FilterLayout.vue'
-  import { mapState } from 'vuex'
+  // import { mapState } from 'vuex'
   export default {
     name: 'Demo',
     data: function () {
@@ -112,7 +109,7 @@
             show:true,
             0:['Mobile'],
             1:['Keds'],
-            category:['Pant'],
+            category:['Mobile'],
             brand:['Keds']
           },
           {
@@ -123,8 +120,8 @@
             show:true,
             0:['Shoe'],
             1:['Haus Alkire'],
-            category:['Pant'],
-            brand:['Keds']
+            category:['Shoe'],
+            brand:['Haus Alkire']
           },
           {
             id:4,
@@ -134,8 +131,8 @@
             show:true,
             0:['Shock'],
             1:['Haus Alkire'],
-            category:['Pant'],
-            brand:['Keds']
+            category:['Shock'],
+            brand:['Haus Alkire']
           },
           {
             id:5,
@@ -145,7 +142,7 @@
             show:true,
             0:['Shoe'],
             1:['Keds'],
-            category:['Pant'],
+            category:[' Mobile'],
             brand:['Keds']
           }
         ],
@@ -184,22 +181,21 @@
         //   }
         // });
         
-        let result1 = this.products;
+        let result = this.products;
 
         // products is an array like object use this solution
-        Array.prototype.forEach.call(result1, child => {
-          console.log(child)
-        });
         let demoFilter = this.demoFilter;
         let categoryLength = this.demoFilter.category.length;
         let brandLength = this.demoFilter.brand.length;
-        // result.froEach((product)=>{
-        //   if(this.hasOne(product.category,demoFilter.category) && this.hasOne(product.brand,demoFilter.brand)){
-        //     product.show = true;
-        //   }else{
-        //     product.show = false;
-        //   }
-        // });
+        Array.prototype.forEach.call(result, (product,index) => {
+
+          console.log(index,this.hasOne(product.category,demoFilter.category),this.hasOne(product.brand,demoFilter.brand));
+          if(this.hasOne(product.category,demoFilter.category) && this.hasOne(product.brand,demoFilter.brand)){
+            product.show = true;
+          }else{
+            product.show = false;
+          }
+        });
         // for (let j = 0, jl = this.filters.length; j < jl; j++) {
         //   result = result.filter(x => {
         //     //this.demoFilter[this.filters[j].key] = ['mobile', 'pant']
@@ -221,9 +217,16 @@
     },
     methods: {
       hasOne: function(search, arr) {
+        console.log(search,arr);
+        if(arr.length == 0){
+          return true;
+        }
         return arr.some(x => {
           for (let i = 0, l = search.length; i < l; i++) {
-            return search[i] === x;
+           if(search[i] === x){
+             return search[i] === x;
+           }
+            
           }
         });
       },

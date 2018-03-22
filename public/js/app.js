@@ -14943,7 +14943,7 @@ module.exports = Vue$3;
 "use strict";
 /* unused harmony export Store */
 /* unused harmony export install */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return mapState; });
+/* unused harmony export mapState */
 /* unused harmony export mapMutations */
 /* unused harmony export mapGetters */
 /* unused harmony export mapActions */
@@ -24462,7 +24462,6 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__FilterLayout_vue__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__FilterLayout_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__FilterLayout_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(23);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -24513,12 +24512,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
 
 
-
+// import { mapState } from 'vuex'
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Demo',
   data: function data() {
@@ -24562,7 +24558,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         show: true,
         0: ['Mobile'],
         1: ['Keds'],
-        category: ['Pant'],
+        category: ['Mobile'],
         brand: ['Keds']
       }, {
         id: 3,
@@ -24572,8 +24568,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         show: true,
         0: ['Shoe'],
         1: ['Haus Alkire'],
-        category: ['Pant'],
-        brand: ['Keds']
+        category: ['Shoe'],
+        brand: ['Haus Alkire']
       }, {
         id: 4,
         title: 'product4',
@@ -24582,8 +24578,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         show: true,
         0: ['Shock'],
         1: ['Haus Alkire'],
-        category: ['Pant'],
-        brand: ['Keds']
+        category: ['Shock'],
+        brand: ['Haus Alkire']
       }, {
         id: 5,
         title: 'product5',
@@ -24592,7 +24588,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         show: true,
         0: ['Shoe'],
         1: ['Keds'],
-        category: ['Pant'],
+        category: [' Mobile'],
         brand: ['Keds']
       }],
       filterValue: [],
@@ -24605,6 +24601,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   },
   computed: _extends({
     filtedResults: function filtedResults() {
+      var _this = this;
+
       // var result = [];
       // var size = Object.keys(this.filterValue).length;
       // var filterValue = this.filterValue;
@@ -24629,22 +24627,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       //   }
       // });
 
-      var result1 = this.products;
+      var result = this.products;
 
       // products is an array like object use this solution
-      Array.prototype.forEach.call(result1, function (child) {
-        console.log(child);
-      });
       var demoFilter = this.demoFilter;
       var categoryLength = this.demoFilter.category.length;
       var brandLength = this.demoFilter.brand.length;
-      // result.froEach((product)=>{
-      //   if(this.hasOne(product.category,demoFilter.category) && this.hasOne(product.brand,demoFilter.brand)){
-      //     product.show = true;
-      //   }else{
-      //     product.show = false;
-      //   }
-      // });
+      Array.prototype.forEach.call(result, function (product, index) {
+
+        console.log(index, _this.hasOne(product.category, demoFilter.category), _this.hasOne(product.brand, demoFilter.brand));
+        if (_this.hasOne(product.category, demoFilter.category) && _this.hasOne(product.brand, demoFilter.brand)) {
+          product.show = true;
+        } else {
+          product.show = false;
+        }
+      });
       // for (let j = 0, jl = this.filters.length; j < jl; j++) {
       //   result = result.filter(x => {
       //     //this.demoFilter[this.filters[j].key] = ['mobile', 'pant']
@@ -24656,15 +24653,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     count: function count() {
       return this.$store.state.count;
     }
-  }, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['category'])),
+  }, mapState(['category'])),
   components: {
     FilterLayout: __WEBPACK_IMPORTED_MODULE_0__FilterLayout_vue___default.a
   },
   methods: {
     hasOne: function hasOne(search, arr) {
+      console.log(search, arr);
+      if (arr.length == 0) {
+        return true;
+      }
       return arr.some(function (x) {
         for (var i = 0, l = search.length; i < l; i++) {
-          return search[i] === x;
+          if (search[i] === x) {
+            return search[i] === x;
+          }
         }
       });
     },
@@ -24896,13 +24899,6 @@ var render = function() {
                 1
               )
             })
-          ),
-          _vm._v(
-            "\r\n\r\n        " +
-              _vm._s(_vm.demoFilter) +
-              "\r\n        " +
-              _vm._s(_vm.filtedResults) +
-              "\r\n      "
           )
         ])
       ]),
@@ -24916,7 +24912,7 @@ var render = function() {
               "div",
               { staticClass: "row" },
               _vm._l(_vm.filtedResults, function(filterResultValue, index) {
-                return _vm.pagination(index)
+                return _vm.pagination(index) && filterResultValue.show
                   ? _c(
                       "article",
                       {
